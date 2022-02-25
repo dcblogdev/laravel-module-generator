@@ -20,6 +20,11 @@
             "Dcblogdev\\Generator\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Dcblogdev\\Generator\\Tests\\": "tests"
+        }
+    },
     "extra": {
         "laravel": {
             "providers": [

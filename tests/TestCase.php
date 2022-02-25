@@ -3,19 +3,14 @@
 namespace Dcblogdev\Generator\Tests;
 
 use Dcblogdev\Generator\GeneratorServiceProvider;
-use Orchestra\Testbench\TestCase as Testbench;
+use Orchestra\Testbench\TestCase as Orchestra;
 
-class TestCase extends Testbench
+class TestCase extends Orchestra
 {
     protected function getPackageProviders($app)
     {
         return [
-            GeneratorServiceProvider::class,
+            GeneratorServiceProvider::class
         ];
-    }
-
-    protected function getEnvironmentSetUp($app)
-    {
-        // perform environment setup
     }
 }
