@@ -4,30 +4,55 @@
 
 Laravel package for generating custom file structures based on templates.
 
+# Requirements
+
+Laravel 8 or 9 and PHP 8.0
+
 # Install
 
 You can install the package via composer:
 
-```
+```bash
 composer require dcblogdev/laravel-generator
 ```
 
-# Config
+Publish both the `config` and `stubs`:
 
-You can publish the config file with:
-
-```
-php artisan vendor:publish --provider="Dcblogdev\Generator\GeneratorServiceProvider" --tag="config"
+```bash
+php artisan vendor:publish --provider="Dcblogdev\Generator\GeneratorServiceProvider"
 ```
 
-.ENV Configuration
-Ensure you've set the following in your .env file:
+This will publish a `generator.php` config file
 
+This contains:
+```php
+'default_path' => env('GENERATOR_PATH', 'stubs/generator-stubs'),
 ```
+By default, the stubs will be located at stubs/generator-stubs you can add your own default paths by adding your paths to your .env file:
 
+```bash 
+GENERATOR_PATH=your-location
 ```
 
 # Usage
+
+Create or update the stubs file. The filename and contents should have placeholders for example `ModulesController` will be replaced with your name + Controller. ie `ContactsController` when the command is executed.
+
+Placeholders:
+
+These placeholders are replaced with the name provided when running `php artisan build:template`
+
+Used in filenames and their contents:
+
+`Modules` = Module name ie `Contacts` 
+`modules` = Module name in lowercase ie `contacts`
+`Model` = Model name ie `Contact`
+`model` = Model name in lowercase ie `contact`
+
+Only used inside files:
+
+`module_` = module name in lowercase ie `purchase_orders`
+`module-` = module name in lowercase ie `purchase-orders` 
 
 ## Change log
 
