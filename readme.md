@@ -44,14 +44,21 @@ These placeholders are replaced with the name provided when running `php artisan
 
 Used in filenames and their contents:
 
-`Modules` = Module name ie `Contacts` 
+`Modules` = Module name ie `Contacts`
+
 `modules` = Module name in lowercase ie `contacts`
+
 `Model` = Model name ie `Contact`
+
 `model` = Model name in lowercase ie `contact`
+
+
 
 Only used inside files:
 
+
 `module_` = module name in lowercase ie `purchase_orders`
+
 `module-` = module name in lowercase ie `purchase-orders` 
 
 ## Change log
