@@ -42,7 +42,7 @@ Placeholders:
 
 These placeholders are replaced with the name provided when running `php artisan build:template`
 
-Used in filenames and their contents:
+Used in filenames:
 
 `Modules` = Module name ie `Contacts`
 
@@ -52,14 +52,20 @@ Used in filenames and their contents:
 
 `model` = Model name in lowercase ie `contact`
 
-
-
 Only used inside files:
 
 
-`module_` = module name in lowercase ie `purchase_orders`
+`{Modules}` = Module name ie `PurchaseOrders`
 
-`module-` = module name in lowercase ie `purchase-orders` 
+`{modules}` = Module name in lowercase ie `purchaseOrder`
+
+`{Model}` = Model name ie `PurchaseOrder`
+
+`{model}` = Model name in lowercase ie `purchaseOrder`
+
+`{module_}` = module name in lowercase ie `purchase_orders`
+
+`{module-}` = module name in lowercase ie `purchase-orders` 
 
 ## Change log
 

@@ -126,13 +126,13 @@ class MakeGeneratorCommand extends Command
 
         foreach ($types as $key => $value) {
             if (file_exists($path)) {
-                if ($key == "module_") {
+                if ($key == "{module_}") {
                     $parts = preg_split('/(?=[A-Z])/', $name, -1, PREG_SPLIT_NO_EMPTY);
                     $parts = array_map('strtolower', $parts);
                     $value = implode('_', $parts);
                 }
 
-                if ($key == 'module-') {
+                if ($key == '{module-}') {
                     $parts = preg_split('/(?=[A-Z])/', $name, -1, PREG_SPLIT_NO_EMPTY);
                     $parts = array_map('strtolower', $parts);
                     $value = implode('-', $parts);
