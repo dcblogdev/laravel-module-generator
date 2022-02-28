@@ -36,7 +36,7 @@ class GeneratorServiceProvider extends ServiceProvider
         }
 
         $this->publishes([
-            __DIR__.'/../default-stubs' => base_path('stubs'),
+            __DIR__.'/../stubs' => base_path('stubs'),
         ], 'stubs');
 
         $this->publishes([

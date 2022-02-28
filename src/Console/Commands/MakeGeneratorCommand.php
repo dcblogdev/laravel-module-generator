@@ -17,12 +17,16 @@ class MakeGeneratorCommand extends Command
         'model'  => 'strtolower',
         'Model'  => 'ucwords',
     ];
+    protected $ignoreFiles = [
+        'module.json'
+    ];
 
     public function handle()
     {
         $this->container['name'] = ucwords($this->ask('Please enter a name'));
         if (strlen($this->container['name']) == 0) {
             $this->error("\nName cannot be empty.");
+            return $this->handle();
         }
 
         $folderPath                = config('generator.default_path');
@@ -39,79 +43,102 @@ class MakeGeneratorCommand extends Command
 
     protected function generate()
     {
+        //ensure directory does not exist
+        $this->delete(base_path('generator-temp'));
+
         $folder = $this->container['folder'];
         $this->copy(base_path($folder), base_path('generator-temp'));
         $folderPath = base_path('generator-temp');
 
-        foreach ($this->caseTypes as $typeName => $case) {
-            $finder = new Finder();
-            $finder->files()->in($folderPath)->name("#$typeName#");
-            foreach ($finder as $file) {
-                $type       = Str::endsWith($file->getPath(), 'migrations') ? 'migration' : '';
-                $sourceFile = $file->getPath().'/'.$file->getFilename();
-                $this->replaceInFile($sourceFile);
+        $finder = new Finder();
+        $finder->files()->in($folderPath);
 
-                $name  = ucwords($this->container['name']);
-                $model = Str::singular($name);
-                $words = [
-                    'Module' => $name,
-                    'module' => strtolower($name),
-                    'Model'  => $model,
-                    'model'  => strtolower($model)
-                ];
-
-                $this->alterFilename($typeName, $sourceFile, $words[$typeName], $type);
-            }
-        }
+        $this->renameFiles($finder);
+        $this->updateFilesContent($finder);
 
         //append content to file
         //$content = "\nrequire base_path('routes/api/v1/".$module."-routes.php');";
         //$this->append(base_path('routes/api/v1/routes.php'), $content);
 
+        $this->delete(base_path('generator-temp/Modules/module'));
         $this->copy($folderPath, './');
         $this->delete($folderPath);
     }
 
-    protected function alterFilename($toReplace, $sourceFile, $name, $type = '')
+    protected function updateFilesContent($finder)
     {
-        $targetFile = str_replace($toReplace, $name, $sourceFile);
-        $targetFile = str_replace("/app/$name", "/app/Model", $targetFile);
+        foreach ($finder as $file) {
+            $sourceFile = $file->getPath().'/'.$file->getFilename();
+            $this->replaceInFile($sourceFile);
+        }
+    }
+
+    protected function renameFiles($finder)
+    {
+        foreach ($finder as $file) {
+            $type       = Str::endsWith($file->getPath(), ['migrations', 'Migrations']) ? 'migration' : '';
+            $sourceFile = $file->getPath().'/'.$file->getFilename();
+            $this->alterFilename($sourceFile, $type);
+        }
+    }
+
+    protected function alterFilename($sourceFile, $type = '')
+    {
+        $name  = ucwords($this->container['name']);
+        $model = Str::singular($name);
+
+        $targetFile = $sourceFile;
+        $targetFile = str_replace('Module', $name, $targetFile);
+        $targetFile = str_replace('module', strtolower($name), $targetFile);
+        $targetFile = str_replace('Model',  $model, $targetFile);
+        $targetFile = str_replace('model', strtolower($model), $targetFile);
+
+        if (in_array(basename($sourceFile), config('generator.ignore_files'))) {
+            $targetFile = dirname($targetFile).'/'.basename($sourceFile);
+        }
+
+        //hack to ensure Model if used does not get replaced
+        $targetFile = str_replace("/app/$name", "/app/Models", $targetFile);
+
+        //hack to ensure modules if used does not get replaced
+        if (Str::contains($targetFile, $name.'s')) {
+            $targetFile = str_replace($name.'s', "Modules", $targetFile);
+        }
+
+        if (!is_dir(dirname($targetFile))) {
+            mkdir(dirname($targetFile), 0777, true);
+        }
+
         $this->rename($sourceFile, $targetFile, $type);
     }
 
-    protected function rename($path, $targetFile, $type = '')
+    protected function rename($sourceFile, $targetFile, $type = '')
     {
         $filesystem = new SymfonyFilesystem;
-        if ($filesystem->exists($path)) {
+        if ($filesystem->exists($sourceFile)) {
             if ($type == 'migration') {
                 $targetFile = $this->appendTimestamp($targetFile);
             }
-            $filesystem->rename($path, $targetFile, true);
+            $filesystem->rename($sourceFile, $targetFile, true);
         }
     }
 
-    protected function appendTimestamp($path)
+    protected function appendTimestamp($sourceFile)
     {
         $timestamp = date('Y_m_d_his_');
-        $file      = $this->getFileFromPath($path);
-        return str_replace($file, $timestamp.$file, $path);
+        $file      = basename($sourceFile);
+        return str_replace($file, $timestamp.$file, $sourceFile);
     }
 
-    protected function getFileFromPath($path)
-    {
-        $parts = explode('/', $path);
-        return end($parts);
-    }
-
-    protected function copy($path, $target)
+    protected function copy($sourceFile, $target)
     {
         $filesystem = new SymfonyFilesystem;
-        if ($filesystem->exists($path)) {
-            $filesystem->mirror($path, $target);
+        if ($filesystem->exists($sourceFile)) {
+            $filesystem->mirror($sourceFile, $target);
         }
     }
 
-    protected function replaceInFile($path)
+    protected function replaceInFile($sourceFile)
     {
         $name  = ucwords($this->container['name']);
         $model = Str::singular($name);
@@ -125,7 +152,7 @@ class MakeGeneratorCommand extends Command
         ];
 
         foreach ($types as $key => $value) {
-            if (file_exists($path)) {
+            if (file_exists($sourceFile)) {
                 if ($key == "{module_}") {
                     $parts = preg_split('/(?=[A-Z])/', $name, -1, PREG_SPLIT_NO_EMPTY);
                     $parts = array_map('strtolower', $parts);
@@ -137,24 +164,24 @@ class MakeGeneratorCommand extends Command
                     $parts = array_map('strtolower', $parts);
                     $value = implode('-', $parts);
                 }
-                file_put_contents($path, str_replace($key, $value, file_get_contents($path)));
+                file_put_contents($sourceFile, str_replace($key, $value, file_get_contents($sourceFile)));
             }
         }
     }
 
-    public function append($path, $content)
+    public function append($sourceFile, $content)
     {
         $filesystem = new SymfonyFilesystem;
-        if ($filesystem->exists($path)) {
-            $filesystem->appendToFile($path, $content);
+        if ($filesystem->exists($sourceFile)) {
+            $filesystem->appendToFile($sourceFile, $content);
         }
     }
 
-    public function delete($path)
+    public function delete($sourceFile)
     {
         $filesystem = new SymfonyFilesystem;
-        if ($filesystem->exists($path)) {
-            $filesystem->remove($path);
+        if ($filesystem->exists($sourceFile)) {
+            $filesystem->remove($sourceFile);
         }
     }
 }

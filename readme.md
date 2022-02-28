@@ -26,9 +26,10 @@ This will publish a `generator.php` config file
 
 This contains:
 ```php
-'default_path' => env('GENERATOR_PATH', 'stubs/generator-stubs'),
+'default_path' => env('GENERATOR_PATH', 'stubs/generator/default'),
+'ignore_files' => ['module.json']
 ```
-By default, the stubs will be located at stubs/generator-stubs you can add your own default paths by adding your paths to your .env file:
+By default, the stubs will be located at stubs/generator you can add your own default paths by adding your paths to your .env file or changing the config file.
 
 ```bash 
 GENERATOR_PATH=your-location
