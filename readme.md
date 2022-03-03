@@ -54,9 +54,9 @@ Used in filenames:
 Only used inside files:
 
 
-`{Modules}` = Module name ie `PurchaseOrders`
+`{Module}` = Module name ie `PurchaseOrders`
 
-`{modules}` = Module name in lowercase ie `purchaseOrder`
+`{module}` = Module name in lowercase ie `purchaseOrder`
 
 `{Model}` = Model name ie `PurchaseOrder`
 
