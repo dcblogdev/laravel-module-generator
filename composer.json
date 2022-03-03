@@ -1,6 +1,6 @@
 {
-    "name": "dcblogdev/laravel-generator",
-    "description": "Generate boilerplate code for Laravel",
+    "name": "dcblogdev/laravel-module-generator",
+    "description": "Generate Laravel Modules from a template.",
     "license": "MIT",
     "authors": [
         {
@@ -9,8 +9,8 @@
             "homepage": "https://dcblog.dev"
         }
     ],
-    "homepage": "https://github.com/dcblogdev/laravel-generator",
-    "keywords": ["Laravel", "Generator"],
+    "homepage": "https://github.com/dcblogdev/laravel-module-generator",
+    "keywords": ["Laravel", "Laravel Modules", "Generator"],
     "require": {
         "illuminate/support": "8.x|9.x",
         "symfony/filesystem": "^5.0|^6.0",
@@ -18,16 +18,16 @@
     },
     "autoload": {
         "psr-4": {
-            "Dcblogdev\\Generator\\": "src/"
+            "Dcblogdev\\ModuleGenerator\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Dcblogdev\\Generator\\GeneratorServiceProvider"
+                "Dcblogdev\\ModuleGenerator\\ModuleGeneratorServiceProvider"
             ],
             "aliases": {
-                "Generator": "Dcblogdev\\Generator\\Facades\\Generator"
+                "Generator": "Dcblogdev\\ModuleGenerator\\Facades\\ModuleGenerator"
             }
         }
     }

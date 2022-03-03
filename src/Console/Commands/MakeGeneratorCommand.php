@@ -1,6 +1,6 @@
 <?php
 
-namespace Dcblogdev\Generator\Console\Commands;
+namespace Dcblogdev\ModuleGenerator\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
@@ -9,16 +9,13 @@ use Symfony\Component\Finder\Finder;
 
 class MakeGeneratorCommand extends Command
 {
-    protected $signature   = 'build:template';
-    protected $description = 'Create starter structures from a template';
+    protected $signature   = 'module:build';
+    protected $description = 'Create starter module from a template';
     protected $caseTypes   = [
         'module' => 'strtolower',
         'Module' => 'ucwords',
         'model'  => 'strtolower',
         'Model'  => 'ucwords',
-    ];
-    protected $ignoreFiles = [
-        'module.json'
     ];
 
     public function handle()
@@ -27,10 +24,14 @@ class MakeGeneratorCommand extends Command
         if (strlen($this->container['name']) == 0) {
             $this->error("\nName cannot be empty.");
             return $this->handle();
+        } else {
+            if (file_exists(base_path('Modules/'.$this->container['name']))) {
+                $this->error("\nModule already exists.");
+                return true;
+            }
         }
 
-        $folderPath                = config('generator.default_path');
-        $this->container['folder'] = $this->ask("Please enter the template folder path", $folderPath);
+        $this->container['folder'] =  config('module-generator.path');
         if (!file_exists(base_path($this->container['folder']))) {
             $this->error("\nPath does not exist.");
             return true;
@@ -38,7 +39,7 @@ class MakeGeneratorCommand extends Command
 
         $this->generate();
 
-        $this->info('Starter '.$this->container['name'].' structure generated successfully.');
+        $this->info('Starter '.$this->container['name'].' module generated successfully.');
     }
 
     protected function generate()
@@ -56,12 +57,8 @@ class MakeGeneratorCommand extends Command
         $this->renameFiles($finder);
         $this->updateFilesContent($finder);
 
-        //append content to file
-        //$content = "\nrequire base_path('routes/api/v1/".$module."-routes.php');";
-        //$this->append(base_path('routes/api/v1/routes.php'), $content);
-
-        $this->delete(base_path('generator-temp/Modules/module'));
-        $this->copy($folderPath, './');
+        $this->copy($folderPath, './Modules');
+        $this->delete('./Modules/Module');
         $this->delete($folderPath);
     }
 
@@ -90,10 +87,10 @@ class MakeGeneratorCommand extends Command
         $targetFile = $sourceFile;
         $targetFile = str_replace('Module', $name, $targetFile);
         $targetFile = str_replace('module', strtolower($name), $targetFile);
-        $targetFile = str_replace('Model',  $model, $targetFile);
+        $targetFile = str_replace('Model', $model, $targetFile);
         $targetFile = str_replace('model', strtolower($model), $targetFile);
 
-        if (in_array(basename($sourceFile), config('generator.ignore_files'))) {
+        if (in_array(basename($sourceFile), config('module-generator.ignore_files'))) {
             $targetFile = dirname($targetFile).'/'.basename($sourceFile);
         }
 

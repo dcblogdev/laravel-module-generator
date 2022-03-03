@@ -1,15 +1,15 @@
 <?php
 
-namespace Dcblogdev\Generator;
+namespace Dcblogdev\ModuleGenerator;
 
 use Illuminate\Support\ServiceProvider;
-use Dcblogdev\Generator\Console\Commands\MakeGeneratorCommand;
+use Dcblogdev\ModuleGenerator\Console\Commands\MakeGeneratorCommand;
 
-class GeneratorServiceProvider extends ServiceProvider
+class ModuleGeneratorServiceProvider extends ServiceProvider
 {
     public function register()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/generator.php', 'generator');
+        $this->mergeConfigFrom(__DIR__.'/../config/module-generator.php', 'module-generator');
     }
 
     public function boot()
@@ -40,7 +40,7 @@ class GeneratorServiceProvider extends ServiceProvider
         ], 'stubs');
 
         $this->publishes([
-                __DIR__.'/../config/generator.php' => config_path('generator.php'),
+                __DIR__.'/../config/module-generator.php' => config_path('module-generator.php'),
             ], 'config');
 
     }

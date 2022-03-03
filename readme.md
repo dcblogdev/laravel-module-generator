@@ -2,7 +2,7 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/dcblogdev/laravel-generator.svg?style=flat-square)](https://packagist.org/packages/dcblogdev/laravel-generator)
 [![Total Downloads](https://img.shields.io/packagist/dt/dcblogdev/laravel-generator.svg?style=flat-square)](https://packagist.org/packages/dcblogdev/laravel-generator)
 
-Laravel package for generating custom file structures based on templates.
+Laravel package for generating [Laravel Modules](https://github.com/nWidart/laravel-modules) from a template. 
 
 # Requirements
 
@@ -13,7 +13,7 @@ Laravel 8 or 9 and PHP 8.0
 You can install the package via composer:
 
 ```bash
-composer require dcblogdev/laravel-generator
+composer require dcblogdev/laravel-module-generator
 ```
 
 Publish both the `config` and `stubs`:
@@ -95,6 +95,6 @@ If you discover any security related issues, please email dave@dcblog.dev email 
 license. Please see the [license file][6] for more information.
 
 [3]:    changelog.md
-[4]:    https://github.com/dcblogdev/laravel-generator
+[4]:    https://github.com/dcblogdev/laravel-module-generator
 [5]:    http://semver.org/
 [6]:    license.md
