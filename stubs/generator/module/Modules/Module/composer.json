@@ -1,0 +1,23 @@
+{
+    "name": "dcblogdev/{module}",
+    "description": "",
+    "authors": [
+        {
+            "name": "David Carr",
+            "email": "dave@dcblog.dev"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\{Module}\\": ""
+        }
+    }
+}

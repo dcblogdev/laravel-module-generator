@@ -97,8 +97,8 @@ class MakeGeneratorCommand extends Command
             $targetFile = dirname($targetFile).'/'.basename($sourceFile);
         }
 
-        //hack to ensure Model if used does not get replaced
-        $targetFile = str_replace("/app/$name", "/app/Models", $targetFile);
+        //hack to ensure Models exists
+        $targetFile = str_replace("Entities", "Models", $targetFile);
 
         //hack to ensure modules if used does not get replaced
         if (Str::contains($targetFile, $name.'s')) {
