@@ -46,5 +46,5 @@ test('can delete {model}', function() {
     ${model} = {Model}::factory()->create();
     $this->delete(route('app.{module}.delete', ${model}->id))->assertRedirect(route('app.{module}.index'));
 
-    $this->assertDatabaseCount('{module}', 0);
+    $this->assertDatabaseCount('{module_}', 0);
 });

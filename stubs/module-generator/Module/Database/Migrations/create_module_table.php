@@ -8,7 +8,7 @@ class Create{Module}Table extends Migration
 {
     public function up()
     {
-        Schema::create('{module}', function (Blueprint $table) {
+        Schema::create('{module_}', function (Blueprint $table) {
             $table->id();
             $table->string('name');
             $table->timestamps();
@@ -17,6 +17,6 @@ class Create{Module}Table extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('{module}');
+        Schema::dropIfExists('{module_}');
     }
 }
