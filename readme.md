@@ -8,7 +8,7 @@ Laravel 8 or 9 and PHP 8.0
 
 ## Video demo
 
-You can see a video demo on [YouTube](https://www.youtube.com/watch?v=K-au-d1LDhc)
+You can see a video demo on [YouTube](https://www.youtube.com/watch?v=DDjAcQolzwM)
 
 # Install
 
