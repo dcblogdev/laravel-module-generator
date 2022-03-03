@@ -51,6 +51,8 @@ Used in filenames:
 
 `model` = Model name in lowercase ie `contact`
 
+> For a folder called `Models` rename it to `Entities` it will be renamed when back to Models when generating a new module.
+
 Only used inside files:
 
 
