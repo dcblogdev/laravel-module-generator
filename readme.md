@@ -1,6 +1,6 @@
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/dcblogdev/laravel-generator.svg?style=flat-square)](https://packagist.org/packages/dcblogdev/laravel-generator)
-[![Total Downloads](https://img.shields.io/packagist/dt/dcblogdev/laravel-generator.svg?style=flat-square)](https://packagist.org/packages/dcblogdev/laravel-generator)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/dcblogdev/laravel-module-generator.svg?style=flat-square)](https://packagist.org/packages/dcblogdev/laravel-module-generator)
+[![Total Downloads](https://img.shields.io/packagist/dt/dcblogdev/laravel-module-generator.svg?style=flat-square)](https://packagist.org/packages/dcblogdev/laravel-module-generator)
 
 Laravel package for generating [Laravel Modules](https://github.com/nWidart/laravel-modules) from a template. 
 
