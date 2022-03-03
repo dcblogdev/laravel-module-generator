@@ -17,17 +17,17 @@ composer require dcblogdev/laravel-module-generator
 Publish both the `config` and `stubs`:
 
 ```bash
-php artisan vendor:publish --provider="Dcblogdev\Generator\GeneratorServiceProvider"
+php artisan vendor:publish --provider="Dcblogdev\ModuleGenerator\ModuleGeneratorServiceProvider"
 ```
 
 This will publish a `generator.php` config file
 
 This contains:
 ```php
-'default_path' => env('GENERATOR_PATH', 'stubs/generator/module'),
+'path' => env('GENERATOR_PATH', 'stubs/module-generator'),
 'ignore_files' => ['module.json']
 ```
-By default, the stubs will be located at stubs/generator you can add your own default paths by adding your paths to your .env file or changing the config file.
+By default, the stubs will be located at stubs/module-generator you can add your own paths by adding your paths to your .env file or changing the config file.
 
 ```bash 
 GENERATOR_PATH=your-location
@@ -39,7 +39,7 @@ Create or update the stubs file. The filename and contents should have placehold
 
 Placeholders:
 
-These placeholders are replaced with the name provided when running `php artisan build:template`
+These placeholders are replaced with the name provided when running `php artisan module:build`
 
 Used in filenames:
 
