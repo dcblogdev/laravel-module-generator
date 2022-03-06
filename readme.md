@@ -64,13 +64,21 @@ Only used inside files:
 
 `{module}` = Module name in lowercase ie `purchaseOrder`
 
+`{module_}` = module name with underscores ie `purchase_orders`
+
+`{module-}` = module name with hyphens ie `purchase-orders`
+
+`{module }` = module name puts space between capital letters ie `PurchaseOrders` becomes `Purchase Orders`
+
 `{Model}` = Model name ie `PurchaseOrder`
 
 `{model}` = Model name in lowercase ie `purchaseOrder`
 
-`{module_}` = module name in lowercase ie `purchase_orders`
+`{model_}` = model name with underscores ie `purchase_orders`
 
-`{module-}` = module name in lowercase ie `purchase-orders` 
+`{model-}` = model name with hyphens ie `purchase-orders`
+
+`{model }` = model name puts space between capital letters ie `PurchaseOrder` becomes `Purchase Order`
 
 ## Change log
 
