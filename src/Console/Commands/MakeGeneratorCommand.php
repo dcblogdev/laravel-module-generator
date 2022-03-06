@@ -140,25 +140,65 @@ class MakeGeneratorCommand extends Command
         $name  = ucwords($this->container['name']);
         $model = Str::singular($name);
         $types = [
-            '{module_}' => null,
-            '{module-}' => null,
-            '{Module}'  => $name,
-            '{module}'  => strtolower($name),
-            '{Model}'   => $model,
-            '{model}'   => strtolower($model)
+            '{Module_}'  => null,
+            '{module_}'  => null,
+            '{module-}'  => null,
+            '{Module-}'  => null,
+            '{Module}'   => $name,
+            '{module}'   => strtolower($name),
+            '{module }'  => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', strtolower($name))),
+            '{Model-}'   => null,
+            '{model-}'   => null,
+            '{Model_}'   => null,
+            '{model_}'   => null,
+            '{Model}'    => $model,
+            '{model}'    => strtolower($model),
+            '{model }'   => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', strtolower($model)))
         ];
 
         foreach ($types as $key => $value) {
             if (file_exists($sourceFile)) {
-                if ($key == "{module_}") {
+                if ($key == '{Module_}') {
+                    $parts = preg_split('/(?=[A-Z])/', $name, -1, PREG_SPLIT_NO_EMPTY);
+                    $value = implode('_', $parts);
+                }
+
+                if ($key == '{module_}') {
                     $parts = preg_split('/(?=[A-Z])/', $name, -1, PREG_SPLIT_NO_EMPTY);
                     $parts = array_map('strtolower', $parts);
                     $value = implode('_', $parts);
                 }
 
-                if ($key == '{module-}') {
+                if ($key == '{Module-}') {
                     $parts = preg_split('/(?=[A-Z])/', $name, -1, PREG_SPLIT_NO_EMPTY);
+                    $value = implode('-', $parts);
+                }
+
+                if ($key == '{module-}') {
+                    $parts = preg_split('/(?=[A-Z])/', $model, -1, PREG_SPLIT_NO_EMPTY);
                     $parts = array_map('strtolower', $parts);
+                    $value = implode('-', $parts);
+                }
+
+                if ($key == '{model_}') {
+                    $parts = preg_split('/(?=[A-Z])/', $model, -1, PREG_SPLIT_NO_EMPTY);
+                    $parts = array_map('strtolower', $parts);
+                    $value = implode('_', $parts);
+                }
+
+                if ($key == '{Model_}') {
+                    $parts = preg_split('/(?=[A-Z])/', $model, -1, PREG_SPLIT_NO_EMPTY);
+                    $value = implode('_', $parts);
+                }
+
+                if ($key == '{model-}') {
+                    $parts = preg_split('/(?=[A-Z])/', $model, -1, PREG_SPLIT_NO_EMPTY);
+                    $parts = array_map('strtolower', $parts);
+                    $value = implode('-', $parts);
+                }
+
+                if ($key == '{Model-}') {
+                    $parts = preg_split('/(?=[A-Z])/', $model, -1, PREG_SPLIT_NO_EMPTY);
                     $value = implode('-', $parts);
                 }
                 file_put_contents($sourceFile, str_replace($key, $value, file_get_contents($sourceFile)));
