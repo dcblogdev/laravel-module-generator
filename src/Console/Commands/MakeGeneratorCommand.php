@@ -146,6 +146,7 @@ class MakeGeneratorCommand extends Command
             '{Module-}'  => null,
             '{Module}'   => $name,
             '{module}'   => strtolower($name),
+            '{Module }'  => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', $name)),
             '{module }'  => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', strtolower($name))),
             '{Model-}'   => null,
             '{model-}'   => null,
@@ -153,6 +154,7 @@ class MakeGeneratorCommand extends Command
             '{model_}'   => null,
             '{Model}'    => $model,
             '{model}'    => strtolower($model),
+            '{Model }'   => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', $model)),
             '{model }'   => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', strtolower($model)))
         ];
 
@@ -175,7 +177,7 @@ class MakeGeneratorCommand extends Command
                 }
 
                 if ($key == '{module-}') {
-                    $parts = preg_split('/(?=[A-Z])/', $model, -1, PREG_SPLIT_NO_EMPTY);
+                    $parts = preg_split('/(?=[A-Z])/', $name, -1, PREG_SPLIT_NO_EMPTY);
                     $parts = array_map('strtolower', $parts);
                     $value = implode('-', $parts);
                 }
