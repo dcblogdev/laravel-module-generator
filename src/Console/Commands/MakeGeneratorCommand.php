@@ -4,6 +4,7 @@ namespace Dcblogdev\ModuleGenerator\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
+use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Symfony\Component\Finder\Finder;
 
@@ -18,7 +19,7 @@ class MakeGeneratorCommand extends Command
         'Model'  => 'ucwords',
     ];
 
-    public function handle()
+    public function handle(): bool
     {
         $this->container['name'] = ucwords($this->ask('Please enter a name'));
         if ($this->container['name'] === '') {
@@ -43,6 +44,8 @@ class MakeGeneratorCommand extends Command
         $this->generate();
 
         $this->info('Starter ' . $this->container['name'] . ' module generated successfully.');
+
+        return true;
     }
 
     protected function generate(): void
@@ -114,10 +117,11 @@ class MakeGeneratorCommand extends Command
             $targetFile = str_replace($name . 's', "Modules", $targetFile);
         }
 
-        if (! is_dir(dirname($targetFile))) {
-            if (! mkdir($concurrentDirectory = dirname($targetFile), 0777, true) && ! is_dir($concurrentDirectory)) {
-                throw new \RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
-            }
+        if (
+            ! is_dir(dirname($targetFile))
+            && ! mkdir($concurrentDirectory = dirname($targetFile), 0777, true) && ! is_dir($concurrentDirectory)
+        ) {
+            throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
 
         $this->rename($sourceFile, $targetFile, $type);
