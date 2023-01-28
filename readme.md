@@ -24,7 +24,7 @@ Publish both the `config` and `stubs`:
 php artisan vendor:publish --provider="Dcblogdev\ModuleGenerator\ModuleGeneratorServiceProvider"
 ```
 
-This will publish a `generator.php` config file
+This will publish a `module-generator.php` config file
 
 This contains:
 ```php
