@@ -10,6 +10,10 @@ Laravel 8 or 9 and PHP 8.0
 
 You can see a video demo on [YouTube](https://www.youtube.com/watch?v=DDjAcQolzwM)
 
+## Warning
+
+> **Don't name your project `modules` this will interfere with the package paths**
+
 # Install
 
 You can install the package via composer:
