@@ -80,10 +80,6 @@ Only used inside files:
 
 `{model }` = model name puts space between capital letters ie `PurchaseOrder` becomes `Purchase Order`
 
-## Change log
-
-Please see the [changelog][3] for more information on what has changed recently.
-
 ## Contributing
 
 Contributions are welcome and will be fully credited.
