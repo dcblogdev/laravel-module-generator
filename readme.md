@@ -1,3 +1,7 @@
+## Community
+
+There is a Discord community. https://discord.gg/VYau8hgwrm For quick help, ask questions in the appropriate channel.
+
 ![Logo](https://repository-images.githubusercontent.com/463559799/6ff80679-ea73-42b9-bcb1-cb4e0e77f475)
 
 Laravel package for generating [Laravel Modules](https://github.com/nWidart/laravel-modules) from a template. 
