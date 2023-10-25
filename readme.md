@@ -9,6 +9,7 @@ Laravel package for generating [Laravel Modules](https://github.com/nWidart/lara
 # Requirements
 
 Laravel 8 or 9 and PHP 8.0
+Laravel Modules package installed https://github.com/nWidart/laravel-modules
 
 ## Video demo
 
