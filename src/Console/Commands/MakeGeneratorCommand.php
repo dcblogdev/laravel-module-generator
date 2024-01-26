@@ -7,70 +7,117 @@ use Illuminate\Support\Str;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Symfony\Component\Finder\Finder;
+use function Laravel\Prompts\error;
+use function Laravel\Prompts\info;
+use function Laravel\Prompts\select;
+use function Laravel\Prompts\text;
 
 class MakeGeneratorCommand extends Command
 {
-    protected       $signature   = 'module:build';
-    protected       $description = 'Create starter module from a template';
-    protected array $caseTypes   = [
+    protected $signature = 'module:build {module?} {--template= : The template to use}';
+    protected $description = 'Create starter module from a template';
+    protected string $moduleName = '';
+    protected string $template = '';
+    protected string $templatePath = '';
+    protected string $tempFolder = '';
+    protected array $caseTypes = [
         'module' => 'strtolower',
         'Module' => 'ucwords',
-        'model'  => 'strtolower',
-        'Model'  => 'ucwords',
+        'model' => 'strtolower',
+        'Model' => 'ucwords',
     ];
 
     public function handle(): bool
     {
-        $this->container['name'] = ucwords($this->ask('Please enter a name'));
-        if ($this->container['name'] === '') {
-            $this->error("\nName cannot be empty.");
+        $this->moduleName = $this->getModuleName();
 
-            return $this->handle();
-        }
-
-        if (file_exists(base_path('Modules/' . $this->container['name']))) {
-            $this->error("\nModule already exists.");
+        if (file_exists(base_path('Modules/'.$this->moduleName))) {
+            error("$this->moduleName module already exists.");
 
             return true;
         }
 
-        $this->container['folder'] = config('module-generator.path');
-        if (! file_exists(base_path($this->container['folder']))) {
-            $this->error("\nPath does not exist.");
+        $this->template = $this->getTemplate();
+        $this->templatePath = base_path($this->template);
+        $this->tempFolder = base_path('generator-temp');
+
+        if (!file_exists($this->templatePath)) {
+            error("$this->templatePath Path does not exist! Please check your config/module-generator.php file.");
 
             return true;
         }
 
         $this->generate();
 
-        $this->info('Starter ' . $this->container['name'] . ' module generated successfully.');
+        info('Starter '.$this->moduleName.' module generated successfully.');
 
         return true;
+    }
+
+    protected function getModuleName(): string
+    {
+        $this->moduleName = ucwords($this->argument('module')) ?? '';
+
+        if ($this->moduleName !== '') {
+            return $this->moduleName;
+        }
+
+        return ucwords(
+            text(
+                label: 'Please enter a name for the module to be created',
+                required: true,
+                validate: fn(string $value) => match (true) {
+                    strlen($value) < 1 => 'The name must be at least 1 characters.',
+                    Str::contains($value, ' ') => 'The name must not contain spaces.',
+                    file_exists(base_path('Modules/'.$value)) => 'Module already exists.',
+                    default => null
+                }
+            )
+        );
+    }
+
+    protected function getTemplate(): string
+    {
+        $template = $this->option('template') ?? '';
+        $templateConfig = config('module-generator.template');
+
+        if ($template !== '') {
+            if (in_array($template, array_keys($templateConfig))) {
+                $template = $templateConfig[$template];
+            } else {
+                error("Invalid template option: $template");
+                $template = '';
+            }
+        }
+
+        if ($template === '') {
+            $template = select(
+                'Which template would you like to use?',
+                array_keys($templateConfig)
+            );
+            $template = $templateConfig[$template];
+        }
+
+        return $template;
     }
 
     protected function generate(): void
     {
         //ensure directory does not exist
-        $this->delete(base_path('generator-temp'));
-
-        //set paths
-        $folder = $this->container['folder'];
-        $name = $this->container['name'];
-        $tempFolder = base_path('generator-temp');
-
-        $this->copy(base_path($folder), $tempFolder);
+        $this->delete($this->tempFolder);
+        $this->copy($this->templatePath, $this->tempFolder.'/Module');
 
         $finder = new Finder();
-        $finder->files()->in($tempFolder);
+        $finder->files()->in($this->tempFolder);
 
         $this->renameFiles($finder);
         $this->updateFilesContent($finder);
 
-        $this->copy($tempFolder.'/'.$name, base_path('Modules/'.$name));
-        $this->delete($tempFolder);
+        $this->copy($this->tempFolder.'/'.$this->moduleName, base_path('Modules/'.$this->moduleName));
+        $this->delete($this->tempFolder);
     }
 
-    public function delete($sourceFile): void
+    protected function delete($sourceFile): void
     {
         $filesystem = new SymfonyFilesystem;
         if ($filesystem->exists($sourceFile)) {
@@ -89,41 +136,41 @@ class MakeGeneratorCommand extends Command
     protected function renameFiles($finder): void
     {
         foreach ($finder as $file) {
-            $type       = Str::endsWith($file->getPath(), ['migrations', 'Migrations']) ? 'migration' : '';
-            $sourceFile = $file->getPath() . '/' . $file->getFilename();
+            $type = Str::endsWith($file->getPath(), ['migrations', 'Migrations']) ? 'migration' : '';
+            $sourceFile = $file->getPath().'/'.$file->getFilename();
             $this->alterFilename($sourceFile, $type);
         }
     }
 
     protected function alterFilename($sourceFile, $type = ''): void
     {
-        $name  = ucwords($this->container['name']);
+        $name = ucwords($this->moduleName);
         $model = Str::singular($name);
 
         $targetFile = $sourceFile;
         $projectPath = base_path();
         $relativePath = substr($sourceFile, strlen($projectPath));
 
-        $targetFile = $projectPath . str_replace(
-            ['Module', 'module', 'Model', 'model'],
-            [$name, strtolower($name), $model, strtolower($model)],
-            $relativePath
-        );
+        $targetFile = $projectPath.str_replace(
+                ['Module', 'module', 'Model', 'model'],
+                [$name, strtolower($name), $model, strtolower($model)],
+                $relativePath
+            );
 
         if (in_array(basename($sourceFile), config('module-generator.ignore_files'), true)) {
-            $targetFile = dirname($targetFile) . '/' . basename($sourceFile);
+            $targetFile = dirname($targetFile).'/'.basename($sourceFile);
         }
 
         $targetFile = str_replace("Entities", "Models", $targetFile);
 
         //hack to ensure modules if used does not get replaced
-        if (Str::contains($targetFile, $name . 's')) {
-            $targetFile = str_replace($name . 's', "Modules", $targetFile);
+        if (Str::contains($targetFile, $name.'s')) {
+            $targetFile = str_replace($name.'s', "Modules", $targetFile);
         }
 
         if (
-            ! is_dir(dirname($targetFile))
-            && ! mkdir($concurrentDirectory = dirname($targetFile), 0777, true) && ! is_dir($concurrentDirectory)
+            !is_dir(dirname($targetFile))
+            && !mkdir($concurrentDirectory = dirname($targetFile), 0777, true) && !is_dir($concurrentDirectory)
         ) {
             throw new RuntimeException(sprintf('Directory "%s" was not created', $concurrentDirectory));
         }
@@ -146,39 +193,39 @@ class MakeGeneratorCommand extends Command
     protected function appendTimestamp($sourceFile): array|string
     {
         $timestamp = date('Y_m_d_his_');
-        $file      = basename($sourceFile);
+        $file = basename($sourceFile);
 
-        return str_replace($file, $timestamp . $file, $sourceFile);
+        return str_replace($file, $timestamp.$file, $sourceFile);
     }
 
     protected function updateFilesContent($finder): void
     {
         foreach ($finder as $file) {
-            $sourceFile = $file->getPath() . '/' . $file->getFilename();
+            $sourceFile = $file->getPath().'/'.$file->getFilename();
             $this->replaceInFile($sourceFile);
         }
     }
 
     protected function replaceInFile($sourceFile): void
     {
-        $name  = ucwords($this->container['name']);
+        $name = ucwords($this->moduleName);
         $model = Str::singular($name);
         $types = [
             '{Module_}' => $this->renamePlaceholders($name, '_'),
             '{module_}' => $this->renamePlaceholders($name, '_', arrayMap: true),
             '{module-}' => $this->renamePlaceholders($name, '-', arrayMap: true),
             '{Module-}' => $this->renamePlaceholders($name, '-'),
-            '{Module}'  => $name,
+            '{Module}' => $name,
             '{Module }' => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', $name)),
-            '{module}'  => strtolower($name),
+            '{module}' => strtolower($name),
             '{module }' => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', strtolower($name))),
-            '{Model-}'  => $this->renamePlaceholders($model, '-'),
-            '{model-}'  => $this->renamePlaceholders($model, '-', arrayMap: true),
-            '{Model_}'  => $this->renamePlaceholders($model, '_'),
-            '{model_}'  => $this->renamePlaceholders($model, '_', arrayMap: true),
-            '{Model}'   => $model,
-            '{model}'   => strtolower($model),
-            '{model }'  => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', strtolower($model))),
+            '{Model-}' => $this->renamePlaceholders($model, '-'),
+            '{model-}' => $this->renamePlaceholders($model, '-', arrayMap: true),
+            '{Model_}' => $this->renamePlaceholders($model, '_'),
+            '{model_}' => $this->renamePlaceholders($model, '_', arrayMap: true),
+            '{Model}' => $model,
+            '{model}' => strtolower($model),
+            '{model }' => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', strtolower($model))),
         ];
 
         foreach ($types as $key => $value) {
@@ -199,7 +246,7 @@ class MakeGeneratorCommand extends Command
         return implode($separator, $parts);
     }
 
-    public function append($sourceFile, $content): void
+    protected function append($sourceFile, $content): void
     {
         $filesystem = new SymfonyFilesystem;
         if ($filesystem->exists($sourceFile)) {
