@@ -8,16 +8,12 @@ Laravel package for generating [Laravel Modules](https://github.com/nWidart/lara
 
 # Requirements
 
-Laravel 8 or 9 and PHP 8.0
+PHP 8.1+
 Laravel Modules package installed https://github.com/nWidart/laravel-modules
 
 ## Video demo
 
-You can see a video demo on [YouTube](https://www.youtube.com/watch?v=DDjAcQolzwM)
-
-## Warning
-
-> **Don't name your project `modules` this will interfere with the package paths**
+To be updated: You can see a video demo on [YouTube](https://www.youtube.com/watch?v=DDjAcQolzwM)
 
 # Install
 
@@ -37,24 +33,29 @@ This will publish a `module-generator.php` config file
 
 This contains:
 ```php
-'path' => env('GENERATOR_PATH', 'stubs/module-generator'),
+'template' => [
+    'default' => 'stubs/module-generator/module',
+    'api' => 'stubs/module-generator/api',
+],
 'ignore_files' => ['module.json']
 ```
-By default, the stubs will be located at stubs/module-generator you can add your own paths by adding your paths to your .env file or changing the config file.
-
-```bash 
-GENERATOR_PATH=your-location
-```
+By default, the stubs will be located at stubs/module-generator you can add your own paths by adding folders and updating the config file.
 
 # Usage
 
+```bash
+php artisan module
+```
+
+You will be asked to enter the name of the module.
+
 Create or update the stubs file. The filename and contents should have placeholders for example `ModulesController` will be replaced with your name + Controller. ie `ContactsController` when the command is executed.
 
-Placeholders:
+## Placeholders:
 
 These placeholders are replaced with the name provided when running `php artisan module:build`
 
-Used in filenames:
+### Used in filenames:
 
 `Module` = Module name ie `Contacts`
 
@@ -64,10 +65,7 @@ Used in filenames:
 
 `model` = Model name in lowercase ie `contact`
 
-> For a folder called `Models` rename it to `Entities` it will be renamed when back to Models when generating a new module.
-
-Only used inside files:
-
+### Only used inside files:
 
 `{Module}` = Module name ie `PurchaseOrders`
 
