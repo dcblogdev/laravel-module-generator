@@ -44,15 +44,12 @@ By default, the stubs will be located at stubs/module-generator you can add your
 # Usage
 
 ```bash
-php artisan module:build
+php artisan module:build {module?} {template?}
 ```
 
-You will be asked to enter the name of the module. Followed by the name of the template.
+{module?} is the name of the module you want to create. If you don't provide a name you will be asked to enter one.
 
-You can set both the name and template as arguments:
-
-- Module: Contacts
-- Template: api
+{template?} is the name of the template you want to use. If you don't provide a name you will be asked to enter one.
 
 ```bash
 php artisan module:build Contacts api
