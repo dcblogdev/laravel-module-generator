@@ -53,19 +53,21 @@ class MakeGeneratorCommand extends Command
         //ensure directory does not exist
         $this->delete(base_path('generator-temp'));
 
+        //set paths
         $folder = $this->container['folder'];
-        $this->copy(base_path($folder), base_path('generator-temp'));
-        $folderPath = base_path('generator-temp');
+        $name = $this->container['name'];
+        $tempFolder = base_path('generator-temp');
+
+        $this->copy(base_path($folder), $tempFolder);
 
         $finder = new Finder();
-        $finder->files()->in($folderPath);
+        $finder->files()->in($tempFolder);
 
         $this->renameFiles($finder);
         $this->updateFilesContent($finder);
 
-        $this->copy($folderPath, './Modules');
-        $this->delete('./Modules/Module');
-        $this->delete($folderPath);
+        $this->copy($tempFolder.'/'.$name, base_path('Modules/'.$name));
+        $this->delete($tempFolder);
     }
 
     public function delete($sourceFile): void
@@ -99,17 +101,19 @@ class MakeGeneratorCommand extends Command
         $model = Str::singular($name);
 
         $targetFile = $sourceFile;
-        $targetFile = str_replace(
+        $projectPath = base_path();
+        $relativePath = substr($sourceFile, strlen($projectPath));
+
+        $targetFile = $projectPath . str_replace(
             ['Module', 'module', 'Model', 'model'],
             [$name, strtolower($name), $model, strtolower($model)],
-            $targetFile
+            $relativePath
         );
 
         if (in_array(basename($sourceFile), config('module-generator.ignore_files'), true)) {
             $targetFile = dirname($targetFile) . '/' . basename($sourceFile);
         }
 
-        //hack to ensure Models exists
         $targetFile = str_replace("Entities", "Models", $targetFile);
 
         //hack to ensure modules if used does not get replaced
@@ -125,6 +129,7 @@ class MakeGeneratorCommand extends Command
         }
 
         $this->rename($sourceFile, $targetFile, $type);
+        //dd([$sourceFile, $targetFile]);
     }
 
     protected function rename($sourceFile, $targetFile, $type = ''): void
