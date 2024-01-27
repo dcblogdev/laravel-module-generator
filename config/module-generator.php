@@ -1,10 +1,9 @@
 <?php
 
 return [
-    //'path' => env('GENERATOR_PATH', 'stubs/module-generator'),
     'template' => [
         'default' => 'stubs/module-generator/default',
-        //'api' => 'stubs/module-generator/api',
+        'Breeze - CRUD' => 'stubs/module-generator/breeze-crud',
     ],
     'ignore_files' => ['module.json']
 ];
