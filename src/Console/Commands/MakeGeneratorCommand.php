@@ -14,7 +14,7 @@ use function Laravel\Prompts\text;
 
 class MakeGeneratorCommand extends Command
 {
-    protected $signature = 'module:build {module?} {--template= : The template to use}';
+    protected $signature = 'module:build {module?} {template?}';
     protected $description = 'Create starter module from a template';
     protected string $moduleName = '';
     protected string $template = '';
@@ -78,7 +78,7 @@ class MakeGeneratorCommand extends Command
 
     protected function getTemplate(): string
     {
-        $template = $this->option('template') ?? '';
+        $template = $this->argument('template') ?? '';
         $templateConfig = config('module-generator.template');
 
         if ($template !== '') {
