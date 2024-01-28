@@ -34,8 +34,9 @@ This will publish a `module-generator.php` config file
 This contains:
 ```php
 'template' => [
-    'default' => 'stubs/module-generator/module',
-    'api' => 'stubs/module-generator/api',
+    'Breeze - Blade - CRUD Web & API' => 'stubs/module-generator/breeze-crud-full',
+    'Breeze - Blade - CRUD Web only' => 'stubs/module-generator/breeze-crud-web',
+    'Breeze - Blade - CRUD API only' => 'stubs/module-generator/breeze-crud-api'
 ],
 'ignore_files' => ['module.json']
 ```
