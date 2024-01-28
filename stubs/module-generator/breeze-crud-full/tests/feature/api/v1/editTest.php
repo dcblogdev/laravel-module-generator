@@ -24,7 +24,7 @@ test('Can update a {model}', function() {
 
     $name = fake()->name;
 
-    putJson(route('api.v1.{module}.update', ${module}), ['name' => $name])
+    putJson(route('api.v1.{module}.update', ${model}), ['name' => $name])
     ->assertJsonMissingValidationErrors()
     ->assertOk();
 
