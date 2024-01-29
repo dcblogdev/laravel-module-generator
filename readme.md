@@ -44,11 +44,11 @@ By default, the stubs will be located at stubs/module-generator you can add your
 
 # Usage
 
-<img width="737" alt="300550938-529c214d-a02a-4577-8904-c865b2f41f7e" src="https://github.com/dcblogdev/laravel-module-generator/assets/1018170/82c0828f-b9d6-4eff-b7ca-908b46fe37e7">
-
 ```bash
 php artisan module:build
 ```
+
+<img width="737" alt="300550938-529c214d-a02a-4577-8904-c865b2f41f7e" src="https://github.com/dcblogdev/laravel-module-generator/assets/1018170/82c0828f-b9d6-4eff-b7ca-908b46fe37e7">
 
 {module?} is the name of the module you want to create. If you don't provide a name you will be asked to enter one.
 
