@@ -40,12 +40,14 @@ This contains:
 ],
 'ignore_files' => ['module.json']
 ```
-By default, the stubs will be located at stubs/module-generator you can add your own paths by adding folders and updating the config file.
+By default, the stubs will be located at stubs/module-generator you can add your paths by adding folders and updating the config file.
 
 # Usage
 
+<img width="737" alt="300550938-529c214d-a02a-4577-8904-c865b2f41f7e" src="https://github.com/dcblogdev/laravel-module-generator/assets/1018170/82c0828f-b9d6-4eff-b7ca-908b46fe37e7">
+
 ```bash
-php artisan module:build {module?} {template?}
+php artisan module:build
 ```
 
 {module?} is the name of the module you want to create. If you don't provide a name you will be asked to enter one.
@@ -53,7 +55,7 @@ php artisan module:build {module?} {template?}
 {template?} is the name of the template you want to use. If you don't provide a name you will be asked to enter one.
 
 ```bash
-php artisan module:build Contacts api
+php artisan module:build Contacts "Breeze - CRUD API only"
 ```
 
 Create or update the stubs file. The filename and contents should have placeholders for example `ModulesController` will be replaced with your name + Controller. ie `ContactsController` when the command is executed.
