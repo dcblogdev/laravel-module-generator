@@ -13,7 +13,7 @@ Laravel Modules package installed https://github.com/nWidart/laravel-modules
 
 ## Video demo
 
-To be updated: You can see a video demo on [YouTube](https://www.youtube.com/watch?v=DDjAcQolzwM)
+To be updated: You can see a video demo on https://www.youtube.com/watch?v=BwYzfb9Fa8A&t=2s
 
 # Install
 
