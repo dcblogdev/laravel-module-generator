@@ -15,7 +15,7 @@ test('Can delete a {model}', function() {
 
     $this->assertDatabaseCount({Model}::class, 1);
 
-    delete(route('{module}.destroy', ${module}))
+    delete(route('{module}.destroy', ${model}))
     ->assertSessionHasNoErrors()
     ->assertRedirect(route('{module}.index'));
 
