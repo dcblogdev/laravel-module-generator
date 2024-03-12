@@ -12,9 +12,9 @@
     "homepage": "https://github.com/dcblogdev/laravel-module-generator",
     "keywords": ["Laravel", "Laravel Modules", "Generator"],
     "require": {
-        "illuminate/support": "10.x",
-        "symfony/filesystem": "^6.0",
-        "symfony/finder": "^6.0",
+        "illuminate/support": "10.x|11.x",
+        "symfony/filesystem": "^6.0|^7.0",
+        "symfony/finder": "^6.0|^7.0",
         "laravel/prompts": "^0.1.15"
     },
     "autoload": {
