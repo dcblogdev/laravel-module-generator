@@ -5,7 +5,7 @@
     "keywords": ["{module}"],
     "priority": 0,
     "providers": [
-        "Modules\\{Module}\\App\\Providers\\{Module}ServiceProvider"
+        "Modules\\{Module}\\Providers\\{Module}ServiceProvider"
     ],
     "files": []
 }

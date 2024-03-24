@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-base::layouts.app>
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -16,8 +16,8 @@
                         @csrf
 
                         <div class="form-group">
-                            <x-input-label for="name" value="{{ __('Name') }}" />
-                            <x-text-input id="name" name="name" class="w-full" value="{{ old('name', ${model}->name) }}" />
+                            <x-base::input-label for="name" value="{{ __('Name') }}" />
+                            <x-base::text-input id="name" name="name" class="w-full" value="{{ old('name', ${model}->name) }}" />
                             @if ($errors->has('name'))
                                 <div class="text-red-500">
                                     {{ $errors->first('name') }}
@@ -25,9 +25,9 @@
                             @endif
                         </div>
 
-                        <x-primary-button type="submit" class="mt-3">
+                        <x-base::primary-button type="submit" class="mt-3">
                             {{ __('Submit') }}
-                        </x-primary-button>
+                        </x-base::primary-button>
 
                     </form>
 
@@ -36,4 +36,4 @@
         </div>
     </div>
 
-</x-app-layout>
+</x-base::layouts.app>
