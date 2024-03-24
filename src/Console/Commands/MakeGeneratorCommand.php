@@ -7,6 +7,7 @@ use Illuminate\Support\Str;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 use Symfony\Component\Finder\Finder;
+
 use function Laravel\Prompts\error;
 use function Laravel\Prompts\info;
 use function Laravel\Prompts\select;
@@ -151,11 +152,26 @@ class MakeGeneratorCommand extends Command
         $projectPath = base_path();
         $relativePath = substr($sourceFile, strlen($projectPath));
 
+
         $targetFile = $projectPath.str_replace(
-                ['Module', 'module', 'Model', 'model'],
-                [$name, strtolower($name), $model, strtolower($model)],
+                [
+                    'Module',
+                    'module',
+                    strtolower($name).'_plural',
+                    'Model',
+                    'model'
+                ],
+                [
+                    $name,
+                    strtolower($name),
+                    strtolower(Str::plural($name)),
+                    $model,
+                    strtolower($model),
+                ],
                 $relativePath
             );
+
+        $this->info($targetFile);
 
         if (in_array(basename($sourceFile), config('module-generator.ignore_files'), true)) {
             $targetFile = dirname($targetFile).'/'.basename($sourceFile);
@@ -168,6 +184,8 @@ class MakeGeneratorCommand extends Command
             $targetFile = str_replace($name.'s', "Modules", $targetFile);
         }
 
+        $targetFile = str_replace($name."_plural", Str::plural($name), $targetFile);
+
         if (
             !is_dir(dirname($targetFile))
             && !mkdir($concurrentDirectory = dirname($targetFile), 0777, true) && !is_dir($concurrentDirectory)
@@ -176,7 +194,6 @@ class MakeGeneratorCommand extends Command
         }
 
         $this->rename($sourceFile, $targetFile, $type);
-        //dd([$sourceFile, $targetFile]);
     }
 
     protected function rename($sourceFile, $targetFile, $type = ''): void
@@ -213,6 +230,7 @@ class MakeGeneratorCommand extends Command
         $types = [
             '{Module_}' => $this->renamePlaceholders($name, '_'),
             '{module_}' => $this->renamePlaceholders($name, '_', arrayMap: true),
+            '{module_plural}' => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', strtolower(Str::plural($name)))),
             '{module-}' => $this->renamePlaceholders($name, '-', arrayMap: true),
             '{Module-}' => $this->renamePlaceholders($name, '-'),
             '{Module}' => $name,

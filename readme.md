@@ -8,7 +8,7 @@ Laravel package for generating [Laravel Modules](https://github.com/nWidart/lara
 
 # Requirements
 
-PHP 8.1+
+PHP 8.2+
 Laravel Modules package installed https://github.com/nWidart/laravel-modules
 
 ## Video demo
@@ -60,6 +60,18 @@ php artisan module:build
 php artisan module:build Contacts "Breeze - CRUD API only"
 ```
 
+Once a module has been created, enable it:
+
+```bash
+php artisan module:enable ModuleName
+```
+
+Then run:
+
+```bash
+composer dump-autoload
+```
+
 Create or update the stubs file. The filename and contents should have placeholders for example `ModulesController` will be replaced with your name + Controller. ie `ContactsController` when the command is executed.
 
 ## Placeholders:
@@ -72,6 +84,8 @@ These placeholders are replaced with the name provided when running `php artisan
 
 `module` = Module name in lowercase ie `contacts`
 
+`module_plural` = Plural module name in lowercase ie demo becomes `demos`
+
 `Model` = Model name ie `Contact`
 
 `model` = Model name in lowercase ie `contact`
@@ -83,6 +97,8 @@ These placeholders are replaced with the name provided when running `php artisan
 `{module}` = Module name in lowercase ie `purchaseOrder`
 
 `{module_}` = module name with underscores ie `purchase_orders`
+
+`module_plural` = Plural module name in lowercase ie demo becomes `demos`
 
 `{module-}` = module name with hyphens ie `purchase-orders`
 

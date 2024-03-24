@@ -1,4 +1,4 @@
-<x-app-layout>
+<x-base::layouts.app>
 
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -15,14 +15,14 @@
                         @csrf
 
                         <div>
-                            <x-input-label for="name" :value="__('Name')" />
-                            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name')" autofocus autocomplete="name" />
-                            <x-input-error class="mt-2" :messages="$errors->get('name')" />
+                            <x-base::input-label for="name" :value="__('Name')" />
+                            <x-base::text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name')" autofocus autocomplete="name" />
+                            <x-base::input-error class="mt-2" :messages="$errors->get('name')" />
                         </div>
 
-                        <x-primary-button type="submit" class="mt-3">
+                        <x-base::primary-button type="submit" class="mt-3">
                             {{ __('Submit') }}
-                        </x-primary-button>
+                        </x-base::primary-button>
 
                     </form>
 
@@ -31,4 +31,4 @@
         </div>
     </div>
 
-</x-app-layout>
+</x-base::layouts.app>
