@@ -148,10 +148,8 @@ class MakeGeneratorCommand extends Command
         $name = ucwords($this->moduleName);
         $model = Str::singular($name);
 
-        $targetFile = $sourceFile;
         $projectPath = base_path();
         $relativePath = substr($sourceFile, strlen($projectPath));
-
 
         $targetFile = $projectPath.str_replace(
                 [
@@ -170,8 +168,6 @@ class MakeGeneratorCommand extends Command
                 ],
                 $relativePath
             );
-
-        $this->info($targetFile);
 
         if (in_array(basename($sourceFile), config('module-generator.ignore_files'), true)) {
             $targetFile = dirname($targetFile).'/'.basename($sourceFile);
