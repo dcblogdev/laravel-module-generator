@@ -21,6 +21,7 @@ class MakeGeneratorCommand extends Command
     protected string $template = '';
     protected string $templatePath = '';
     protected string $tempFolder = '';
+    protected string $moduleConfigPath = '';
     protected array $caseTypes = [
         'module' => 'strtolower',
         'Module' => 'ucwords',
@@ -32,7 +33,10 @@ class MakeGeneratorCommand extends Command
     {
         $this->moduleName = $this->getModuleName();
 
-        if (file_exists(base_path('Modules/'.$this->moduleName))) {
+        $moduleConfigPath = config('modules.paths.modules', 'Modules').'/';
+        $this->moduleConfigPath = Str::endsWith($moduleConfigPath, '/') ? $moduleConfigPath : $moduleConfigPath.'/';
+
+        if (file_exists($this->moduleConfigPath.$this->moduleName)) {
             error("$this->moduleName module already exists.");
 
             return true;
@@ -70,7 +74,7 @@ class MakeGeneratorCommand extends Command
                 validate: fn(string $value) => match (true) {
                     strlen($value) < 1 => 'The name must be at least 1 characters.',
                     Str::contains($value, ' ') => 'The name must not contain spaces.',
-                    file_exists(base_path('Modules/'.$value)) => 'Module already exists.',
+                    file_exists($this->moduleConfigPath.$value) => 'Module already exists.',
                     default => null
                 }
             )
@@ -114,7 +118,7 @@ class MakeGeneratorCommand extends Command
         $this->renameFiles($finder);
         $this->updateFilesContent($finder);
 
-        $this->copy($this->tempFolder.'/'.$this->moduleName, base_path('Modules/'.$this->moduleName));
+        $this->copy($this->tempFolder.'/'.$this->moduleName, $this->moduleConfigPath.$this->moduleName);
         $this->delete($this->tempFolder);
     }
 
