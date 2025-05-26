@@ -108,9 +108,9 @@ These placeholders are replaced with the name provided when running `php artisan
 
 `{model}` = Model name in lowercase ie `purchaseOrder`
 
-`{model_}` = model name with underscores ie `purchase_orders`
+`{model_}` = model name with underscores ie `purchase_order`
 
-`{model-}` = model name with hyphens ie `purchase-orders`
+`{model-}` = model name with hyphens ie `purchase-order`
 
 `{model }` = model name puts space between capital letters ie `PurchaseOrder` becomes `Purchase Order`
 
