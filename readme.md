@@ -92,27 +92,50 @@ These placeholders are replaced with the name provided when running `php artisan
 
 ### Only used inside files:
 
-`{Module}` = Module name ie `PurchaseOrders`
+## 🟦 Module Placeholders (`$name = 'PurchaseOrders'`)
 
-`{module}` = Module name in lowercase ie `purchaseOrder`
+| Placeholder               | Value              |
+|---------------------------|---------------------|
+| `{Module}`                | `PurchaseOrders`     |
+| `{Module }`               | `Purchase Orders`    |
+| `{Module-}`               | `Purchase-Orders`    |
+| `{Module_}`               | `Purchase_Orders`    |
+| `{ModuleCamel}`           | `purchaseOrders`     |
+| `{ModuleStudly}`          | `PurchaseOrders`     |
+| `{ModuleTitle}`           | `Purchase Orders`    |
+| `{module}`                | `purchaseorders`     |
+| `{module }`               | `purchase orders`    |
+| `{module-}`               | `purchase-orders`    |
+| `{module_}`               | `purchase_orders`    |
+| `{moduleCamel}`           | `purchaseOrders`     |
+| `{moduleStudly}`          | `PurchaseOrders`     |
+| `{modulePlural}`          | `purchase orders`    |
+| `{module_plural}`         | `purchase orders`    |
+| `{module_plural_snake}`   | `purchase_orders`    |
+| `{module_plural_kebab}`   | `purchase-orders`    |
+| `{module_title}`          | `Purchase Orders`    |
 
-`{module_}` = module name with underscores ie `purchase_orders`
+## 🟩 Model Placeholders (`$model = 'PurchaseOrder'`)
 
-`module_plural` = Plural module name in lowercase ie demo becomes `demos`
-
-`{module-}` = module name with hyphens ie `purchase-orders`
-
-`{module }` = module name puts space between capital letters ie `PurchaseOrders` becomes `Purchase Orders`
-
-`{Model}` = Model name ie `PurchaseOrder`
-
-`{model}` = Model name in lowercase ie `purchaseOrder`
-
-`{model_}` = model name with underscores ie `purchase_orders`
-
-`{model-}` = model name with hyphens ie `purchase-orders`
-
-`{model }` = model name puts space between capital letters ie `PurchaseOrder` becomes `Purchase Order`
+| Placeholder               | Value              |
+|---------------------------|---------------------|
+| `{Model}`                 | `PurchaseOrder`      |
+| `{Model }`                | `Purchase Order`     |
+| `{Model-}`                | `Purchase-Order`     |
+| `{Model_}`                | `Purchase_Order`     |
+| `{ModelCamel}`            | `purchaseOrder`      |
+| `{ModelStudly}`           | `PurchaseOrder`      |
+| `{ModelTitle}`            | `Purchase Order`     |
+| `{model}`                 | `purchaseorder`      |
+| `{model }`                | `purchase order`     |
+| `{model-}`                | `purchase-order`     |
+| `{model_}`                | `purchase_order`     |
+| `{modelCamel}`            | `purchaseOrder`      |
+| `{modelStudly}`           | `PurchaseOrder`      |
+| `{model_plural}`          | `purchase orders`    |
+| `{model_plural_snake}`    | `purchase_orders`    |
+| `{model_plural_kebab}`    | `purchase-orders`    |
+| `{model_title}`           | `Purchase Order`     |
 
 ## Contributing
 
