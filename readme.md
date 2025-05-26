@@ -96,46 +96,46 @@ These placeholders are replaced with the name provided when running `php artisan
 
 | Placeholder               | Value              |
 |---------------------------|---------------------|
-| `{Module}`                | `PurchaseOrders`     |
-| `{Module }`               | `Purchase Orders`    |
-| `{Module-}`               | `Purchase-Orders`    |
-| `{Module_}`               | `Purchase_Orders`    |
-| `{ModuleCamel}`           | `purchaseOrders`     |
-| `{ModuleStudly}`          | `PurchaseOrders`     |
-| `{ModuleTitle}`           | `Purchase Orders`    |
-| `{module}`                | `purchaseorders`     |
-| `{module }`               | `purchase orders`    |
-| `{module-}`               | `purchase-orders`    |
-| `{module_}`               | `purchase_orders`    |
-| `{moduleCamel}`           | `purchaseOrders`     |
-| `{moduleStudly}`          | `PurchaseOrders`     |
-| `{modulePlural}`          | `purchase orders`    |
-| `{module_plural}`         | `purchase orders`    |
-| `{module_plural_snake}`   | `purchase_orders`    |
-| `{module_plural_kebab}`   | `purchase-orders`    |
-| `{module_title}`          | `Purchase Orders`    |
+| {Module}                | PurchaseOrders     |
+| {Module }               | Purchase Orders    |
+| {Module-}               | Purchase-Orders    |
+| {Module_}               | Purchase_Orders    |
+| {ModuleCamel}           | purchaseOrders     |
+| {ModuleStudly}          | PurchaseOrders     |
+| {ModuleTitle}           | Purchase Orders    |
+| {module}                | purchaseorders     |
+| {module }               | purchase orders    |
+| {module-}               | purchase-orders    |
+| {module_}               | purchase_orders    |
+| {moduleCamel}           | purchaseOrders     |
+| {moduleStudly}          | PurchaseOrders     |
+| {modulePlural}          | purchase orders    |
+| {module_plural}         | purchase orders    |
+| {module_plural_snake}   | purchase_orders    |
+| {module_plural_kebab}   | purchase-orders    |
+| {module_title}          | Purchase Orders    |
 
 ## 🟩 Model Placeholders (`$model = 'PurchaseOrder'`)
 
 | Placeholder               | Value              |
 |---------------------------|---------------------|
-| `{Model}`                 | `PurchaseOrder`      |
-| `{Model }`                | `Purchase Order`     |
-| `{Model-}`                | `Purchase-Order`     |
-| `{Model_}`                | `Purchase_Order`     |
-| `{ModelCamel}`            | `purchaseOrder`      |
-| `{ModelStudly}`           | `PurchaseOrder`      |
-| `{ModelTitle}`            | `Purchase Order`     |
-| `{model}`                 | `purchaseorder`      |
-| `{model }`                | `purchase order`     |
-| `{model-}`                | `purchase-order`     |
-| `{model_}`                | `purchase_order`     |
-| `{modelCamel}`            | `purchaseOrder`      |
-| `{modelStudly}`           | `PurchaseOrder`      |
-| `{model_plural}`          | `purchase orders`    |
-| `{model_plural_snake}`    | `purchase_orders`    |
-| `{model_plural_kebab}`    | `purchase-orders`    |
-| `{model_title}`           | `Purchase Order`     |
+| {Model}                 | PurchaseOrder      |
+| {Model }                | Purchase Order     |
+| {Model-}                | Purchase-Order     |
+| {Model_}                | Purchase_Order     |
+| {ModelCamel}            | purchaseOrder      |
+| {ModelStudly}           | PurchaseOrder      |
+| {ModelTitle}            | Purchase Order     |
+| {model}                 | purchaseorder      |
+| {model }                | purchase order     |
+| {model-}                | purchase-order     |
+| {model_}                | purchase_order     |
+| {modelCamel}            | purchaseOrder      |
+| {modelStudly}           | PurchaseOrder      |
+| {model_plural}          | purchase orders    |
+| {model_plural_snake}    | purchase_orders    |
+| {model_plural_kebab}    | purchase-orders    |
+| {model_title}           | Purchase Order     |
 
 ## Contributing
 
