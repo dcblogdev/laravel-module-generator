@@ -227,23 +227,47 @@ class MakeGeneratorCommand extends Command
     {
         $name = ucwords($this->moduleName);
         $model = Str::singular($name);
+        $types = $this->generatePlaceholderMap($name, $model);
+
+        if (!file_exists($sourceFile)) {
+            return;
+        }
+
+        $content = file_get_contents($sourceFile);
+        $updated = str_replace(array_keys($types), array_values($types), $content);
+        file_put_contents($sourceFile, $updated);
+    }
+
+    /*protected function replaceInFile($sourceFile): void
+    {
+        $name = ucwords($this->moduleName);
+        $model = Str::singular($name);
         $types = [
-            '{Module_}' => $this->renamePlaceholders($name, '_'),
-            '{module_}' => $this->renamePlaceholders($name, '_', arrayMap: true),
-            '{module_plural}' => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', strtolower(Str::plural($name)))),
-            '{module-}' => $this->renamePlaceholders($name, '-', arrayMap: true),
-            '{Module-}' => $this->renamePlaceholders($name, '-'),
             '{Module}' => $name,
+            '{Module_}' => $this->renamePlaceholders($name, '_'),
+            '{Module-}' => $this->renamePlaceholders($name, '-'),
             '{Module }' => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', $name)),
+            '{ModuleCamel}' => lcfirst($name),
+
             '{module}' => strtolower($name),
+            '{module_}' => $this->renamePlaceholders($name, '_', arrayMap: true),
+            '{module-}' => $this->renamePlaceholders($name, '-', arrayMap: true),
             '{module }' => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', strtolower($name))),
-            '{Model-}' => $this->renamePlaceholders($model, '-'),
-            '{model-}' => $this->renamePlaceholders($model, '-', arrayMap: true),
-            '{Model_}' => $this->renamePlaceholders($model, '_'),
-            '{model_}' => $this->renamePlaceholders($model, '_', arrayMap: true),
+            '{moduleCamel}' => lcfirst($name),
+            '{modulePlural}' => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', strtolower(Str::plural($name)))),
+            '{module_plural}' => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', strtolower(Str::plural($name)))),
+
             '{Model}' => $model,
+            '{Model_}' => $this->renamePlaceholders($model, '_'),
+            '{Model-}' => $this->renamePlaceholders($model, '-'),
+            '{Model }' => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', $model)),
+            '{ModelCamel}' => lcfirst($model),
+
             '{model}' => strtolower($model),
+            '{model_}' => $this->renamePlaceholders($model, '_', arrayMap: true),
+            '{model-}' => $this->renamePlaceholders($model, '-', arrayMap: true),
             '{model }' => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', strtolower($model))),
+            '{modelCamel}' => lcfirst($model),
         ];
 
         foreach ($types as $key => $value) {
@@ -251,6 +275,82 @@ class MakeGeneratorCommand extends Command
                 file_put_contents($sourceFile, str_replace($key, $value, file_get_contents($sourceFile)));
             }
         }
+    }*/
+
+    protected function generatePlaceholderMap(string $name, string $model): array
+    {
+        $spaceify = fn(string $string) => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', $string));
+        $titleCase = fn(string $string) => ucwords(str_replace('_', ' ', Str::snake($string)));
+
+        $pluralName = Str::plural($name);
+        $snakeName = Str::snake($name);
+        $kebabName = Str::kebab($name);
+
+        $snakePlural = Str::snake($pluralName);
+        $kebabPlural = Str::kebab($pluralName);
+
+        $modelSnake = Str::snake($model);
+        $modelKebab = Str::kebab($model);
+        $modelPlural = Str::plural($model);
+        $modelSnakePlural = Str::snake($modelPlural);
+        $modelKebabPlural = Str::kebab($modelPlural);
+
+        return [
+            // Module base
+            '{Module}' => $name,
+            '{module}' => strtolower($name),
+
+            // Snake and kebab
+            '{Module_}' => $this->renamePlaceholders($name, '_'),
+            '{module_}' => $this->renamePlaceholders($name, '_', arrayMap: true),
+            '{Module-}' => $this->renamePlaceholders($name, '-'),
+            '{module-}' => $this->renamePlaceholders($name, '-', arrayMap: true),
+
+            // Plural
+            '{module_plural}' => $spaceify(strtolower($pluralName)),
+            '{modulePlural}' => $spaceify(strtolower($pluralName)),
+            '{module_plural_snake}' => $snakePlural,
+            '{module_plural_kebab}' => $kebabPlural,
+
+            // camelCase and StudlyCase
+            '{moduleCamel}' => lcfirst($name),
+            '{ModuleCamel}' => $name,
+            '{moduleStudly}' => Str::studly($name),
+            '{ModuleStudly}' => Str::studly($name),
+
+            // Human readable
+            '{Module }' => $spaceify($name),
+            '{module }' => $spaceify(strtolower($name)),
+            '{module_title}' => $titleCase($name),
+            '{ModuleTitle}' => $titleCase($name),
+
+            // Model base
+            '{Model}' => $model,
+            '{model}' => strtolower($model),
+
+            // Snake and kebab
+            '{Model_}' => $this->renamePlaceholders($model, '_'),
+            '{model_}' => $this->renamePlaceholders($model, '_', arrayMap: true),
+            '{Model-}' => $this->renamePlaceholders($model, '-'),
+            '{model-}' => $this->renamePlaceholders($model, '-', arrayMap: true),
+
+            // Plural
+            '{model_plural}' => $spaceify(strtolower($modelPlural)),
+            '{model_plural_snake}' => $modelSnakePlural,
+            '{model_plural_kebab}' => $modelKebabPlural,
+
+            // camelCase and StudlyCase
+            '{modelCamel}' => lcfirst($model),
+            '{ModelCamel}' => $model,
+            '{modelStudly}' => Str::studly($model),
+            '{ModelStudly}' => Str::studly($model),
+
+            // Human readable
+            '{Model }' => $spaceify($model),
+            '{model }' => $spaceify(strtolower($model)),
+            '{model_title}' => $titleCase($model),
+            '{ModelTitle}' => $titleCase($model),
+        ];
     }
 
     protected function renamePlaceholders($model, $separator, $arrayMap = null): string
