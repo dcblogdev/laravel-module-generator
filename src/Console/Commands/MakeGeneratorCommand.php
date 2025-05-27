@@ -156,22 +156,22 @@ class MakeGeneratorCommand extends Command
         $relativePath = substr($sourceFile, strlen($projectPath));
 
         $targetFile = $projectPath.str_replace(
-                [
-                    'Module',
-                    'module',
-                    strtolower($name).'_plural',
-                    'Model',
-                    'model'
-                ],
-                [
-                    $name,
-                    strtolower($name),
-                    strtolower(Str::plural($name)),
-                    $model,
-                    strtolower($model),
-                ],
-                $relativePath
-            );
+            [
+                'Module',
+                'module',
+                strtolower($name).'_plural',
+                'Model',
+                'model'
+            ],
+            [
+                $name,
+                Str::kebab($name),
+                Str::kebab(Str::plural($name)),
+                $model,
+                Str::kebab($model),
+            ],
+            $relativePath
+        );
 
         if (in_array(basename($sourceFile), config('module-generator.ignore_files'), true)) {
             $targetFile = dirname($targetFile).'/'.basename($sourceFile);
@@ -237,45 +237,6 @@ class MakeGeneratorCommand extends Command
         $updated = str_replace(array_keys($types), array_values($types), $content);
         file_put_contents($sourceFile, $updated);
     }
-
-    /*protected function replaceInFile($sourceFile): void
-    {
-        $name = ucwords($this->moduleName);
-        $model = Str::singular($name);
-        $types = [
-            '{Module}' => $name,
-            '{Module_}' => $this->renamePlaceholders($name, '_'),
-            '{Module-}' => $this->renamePlaceholders($name, '-'),
-            '{Module }' => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', $name)),
-            '{ModuleCamel}' => lcfirst($name),
-
-            '{module}' => strtolower($name),
-            '{module_}' => $this->renamePlaceholders($name, '_', arrayMap: true),
-            '{module-}' => $this->renamePlaceholders($name, '-', arrayMap: true),
-            '{module }' => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', strtolower($name))),
-            '{moduleCamel}' => lcfirst($name),
-            '{modulePlural}' => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', strtolower(Str::plural($name)))),
-            '{module_plural}' => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', strtolower(Str::plural($name)))),
-
-            '{Model}' => $model,
-            '{Model_}' => $this->renamePlaceholders($model, '_'),
-            '{Model-}' => $this->renamePlaceholders($model, '-'),
-            '{Model }' => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', $model)),
-            '{ModelCamel}' => lcfirst($model),
-
-            '{model}' => strtolower($model),
-            '{model_}' => $this->renamePlaceholders($model, '_', arrayMap: true),
-            '{model-}' => $this->renamePlaceholders($model, '-', arrayMap: true),
-            '{model }' => trim(preg_replace('/(?<!\ )[A-Z]/', ' $0', strtolower($model))),
-            '{modelCamel}' => lcfirst($model),
-        ];
-
-        foreach ($types as $key => $value) {
-            if (file_exists($sourceFile)) {
-                file_put_contents($sourceFile, str_replace($key, $value, file_get_contents($sourceFile)));
-            }
-        }
-    }*/
 
     protected function generatePlaceholderMap(string $name, string $model): array
     {
