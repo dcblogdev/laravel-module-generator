@@ -16,7 +16,7 @@
         "Generator"
     ],
     "require": {
-        "illuminate/support": "10.x|11.x|^12.0",
+        "illuminate/support": "10.x|11.x|^12.0|^13.0",
         "symfony/filesystem": "^6.0|^7.0",
         "symfony/finder": "^6.0|^7.0",
         "laravel/prompts": "^0.1.15|^0.3"
